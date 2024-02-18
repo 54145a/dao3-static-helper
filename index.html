@@ -62,7 +62,7 @@
         };
         async function postText() {
             const text = document.getElementById("text");
-            const data = text.innerText;
+            const data = text.value;
             await post(data);
             text.innerText = "";
         }
