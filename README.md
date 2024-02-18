@@ -1,0 +1,1 @@
+# dao3-static-helper
