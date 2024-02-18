@@ -36,7 +36,8 @@
     <button onclick="postText()">上传文本</button><br>
     <h3>上传文件</h3>
     <input type="file" multiple="false" id="file" onchange="postFile()"><br>
-    <code id="result">上传结果会在这里显示</code>
+    <h3>上传结果</h3>
+    <p id="result"></p>
     <script>
         const resultDisplay = document.getElementById("result");
         function read() {
@@ -52,7 +53,8 @@
                 body: data,
                 mode: "cors"
             });
-            return await postResult.json();
+            const resultData = await postResult.json();
+            resultDisplay.innerText = JSON.stringify(resultData);
         }
         function postFile() {
             const input = document.getElementById("file");
@@ -60,16 +62,14 @@
             const reader = new FileReader();
             reader.onload = async function () {
                 const data = reader.result;
-                const result = await post(data);
-                resultDisplay.innerText = result;
+                await post(data);
             };
             reader.readAsText(file);
         };
         async function postText() {
             const text = document.getElementById("text");
             const data = text.innerText;
-            const result = await post(data);
-            resultDisplay.innerText = result;
+            await post(data);
             text.innerText = "";
         }
     </script>
