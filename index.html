@@ -19,16 +19,50 @@
 </head>
 
 <body>
-    <h1>Dao3 Static Helper</h1>
+    <h1>Dao3 Static 工具</h1>
     <h2>读取</h2>
-    Hash(不带后缀名): <input id="read" type="text"><br>
+    Hash(不带后缀名): <input type="text" id="read"><br>
     <button onclick="read()">读取</button><br>
     <h2>上传</h2>
-    test<br>
+    在这里输入上传的文本:
+    <textarea id="text" cols="30" rows="10"></textarea><br>
+    <button onclick="postText()">上传文本</button><br>
+    或者选择一个文件: <input type="file" multiple="false" id="file" onchange="postFile()"><br>
+    <code id="result"></code>
     <script>
+        const resultDisplay = document.getElementById("result");
         function read() {
             const hash = document.getElementById("read").value;
             open(`//static.dao3.fun/block/${hash}.json`, "_blank");
+        }
+        async function post(data) {
+            const postResult = await fetch("https://static.dao3.fun/block/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/json"
+                },
+                body: data,
+                mode: "cors"
+            });
+            return await postResult.json();
+        }
+        function postFile() {
+            const input = document.getElementById("file");
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = async function () {
+                const data = reader.result;
+                const result = await post(data);
+                resultDisplay.innerText = result;
+            };
+            reader.readAsText(file);
+        };
+        async function postText() {
+            const text = document.getElementById("text");
+            const data = text.innerText
+            const result = await post(data);
+            resultDisplay.innerText = result;
+            text.innerText = "";
         }
     </script>
 </body>
