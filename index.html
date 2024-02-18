@@ -63,6 +63,7 @@
         async function postText() {
             const text = document.getElementById("text");
             const data = text.value;
+            if (data.length === 0) return;
             await post(data);
             text.value = "";
         }
