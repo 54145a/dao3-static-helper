@@ -12,15 +12,17 @@
         }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+    <script>
+    if (new URLSearchParams(location.search).get("eruda") === "1") eruda.init();
+    </script>
     <title>Dao3 Static Helper</title>
 </head>
 
 <body>
     <h1>Dao3 Static Helper</h1>
     <h2>读取</h2>
-    Hash(不带后缀名): <input type="text"><br>
-    <button id="read" onclick="read()">读取</button><br>
+    Hash(不带后缀名): <input id="read" type="text"><br>
+    <button onclick="read()">读取</button><br>
     <h2>上传</h2>
     test<br>
     <script>
