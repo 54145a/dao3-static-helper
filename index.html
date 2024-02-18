@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
+    <title>Dao3 Static Helper</title>
+</head>
+
+<body>
+    <h1>Dao3 Static Helper</h1>
+    <h2>读取</h2>
+    Hash(不带后缀名): <input type="text"><br>
+    <button id="read" onclick="read()">读取</button><br>
+    <h2>上传</h2>
+    test<br>
+    <script>
+        function read() {
+            const hash = document.getElementById("read").value;
+            open(`//static.dao3.fun/block/${hash}.json`, "_blank");
+        }
+    </script>
 </body>
+
 </html>
