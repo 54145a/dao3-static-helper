@@ -36,6 +36,7 @@
         const resultDisplay = document.getElementById("result");
         function read() {
             const hash = document.getElementById("read").value;
+            if (hash.length === 0) return;
             open(`//static.dao3.fun/block/${hash}.json`, "_blank");
         }
         async function post(data) {
