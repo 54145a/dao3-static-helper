@@ -4,22 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        #read,
-        #text {
-            width: 90%;
-        }
-    </style>
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>
         eruda.init();
-    </script>
+    </script> -->
     <title>Dao3 Static Helper</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
     <h1>Dao3 Static 工具</h1>
-    <h2>读取</h2>
+    <!-- <h2>读取</h2>
     输入Hash(不带后缀名): <br>
     <input type="text" id="read"><br>
     <button onclick="read()">读取</button><br>
@@ -31,44 +26,48 @@
     <h3>上传文件</h3>
     <input type="file" multiple="false" id="file" onchange="postFile()"><br>
     <h3>上传结果</h3>
-    <code id="result"></p>
-    <script>
-        const resultDisplay = document.getElementById("result");
-        function read() {
-            const hash = document.getElementById("read").value;
-            if (hash.length === 0) return;
-            open(`//static.dao3.fun/block/${hash}.json`, "_blank");
-        }
-        async function post(data) {
-            const postResult = await fetch("https://static.dao3.fun/block/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/json"
-                },
-                body: data,
-                mode: "cors"
-            });
-            const resultData = await postResult.json();
-            resultDisplay.innerText = JSON.stringify(resultData);
-        }
-        function postFile() {
-            const input = document.getElementById("file");
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = async function () {
-                const data = reader.result;
-                await post(data);
-            };
-            reader.readAsText(file);
-        };
-        async function postText() {
-            const text = document.getElementById("text");
-            const data = text.value;
-            if (data.length === 0) return;
-            await post(data);
-            text.value = "";
-        }
-    </script>
+    <code id="result"></p> -->
+
+    <div class="menu read">
+        <h2 class="title">通过Hash读取文件</h2>
+        <form id="readHashForm">
+            <p class="labal">Hash: </p>
+            <input type="text" id="readHash"/>
+            <input type="submit" value="获取"/>
+
+        </form>
+        <p class="tip"></p>
+        <div class="preview flex-column">
+            <button class="change-preview-vis">显示/隐藏预览</button>
+            <iframe src="" class="frame hidden"></iframe>            
+        </div>
+    </div>
+
+    <div class="menu postText">
+        <h2 class="title">上传文本</h2>
+        <form id="postTextForm">
+            <p class="labal">输入文本: </p>
+            <textarea id="postText"></textarea>
+            <input type="submit" value="上传"/>
+        </form>
+        <p class="tip"></p>
+    </div>
+
+    <div class="menu postFile">
+        <h2 class="title">上传文件</h2>
+        <form id="postFileForm">
+            <p>点击按钮上传或直接将文件拖拽到下方</p>
+            <input type="file" id="postFile" />
+            <div class="preview flex-column">
+                <button class="change-preview-vis">显示/隐藏预览</button>
+                <iframe src="" class="frame hidden"></iframe>            
+            </div>
+            <button type="submit">上传</button>
+        </form>
+        <p class="tip"></p>
+    </div>
+
+    <script src="index.js" type="module" refer></script>
 </body>
 
 </html>
