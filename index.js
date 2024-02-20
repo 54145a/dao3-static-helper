@@ -9,6 +9,9 @@ import { getFileByHash, postFile, postText } from "./hash";
     let tipEl = document.querySelector(".read .tip");
     let previewEl = document.querySelector(".read .preview .frame");
     let inputFormEl = document.getElementById("readHashForm");
+
+    let fileName = null;
+    let url = null;
     
     inputFormEl?.addEventListener("submit", async (ev) => {
         // 防止刷新
@@ -23,11 +26,30 @@ import { getFileByHash, postFile, postText } from "./hash";
                 tipEl.innerText = `已接收${byteNum}字节……`
             })
             tipEl.innerText = `传输完毕！大小：${file.size}字节，文件类型：${file.type}`
+
+            fileName = file.name;
+            url = URL.createObjectURL(file);
             // 预览
-            previewEl.src = URL.createObjectURL(file);            
+            previewEl.src = url;            
         }catch(e){
             tipEl.innerText = `传输失败！${e}`
         }
+    })
+
+    let openBtn = document.getElementById("open");
+    openBtn?.addEventListener("click", ()=>{
+        open(`//static.dao3.fun/block/${inputEl.value}`, "_blank")
+    })
+
+    let downloadBtn = document.getElementById("download");
+    downloadBtn?.addEventListener("click", async ()=>{
+        if(!url || !fileName){
+            inputEl.submit();
+        }
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click()
     })
 })();
 

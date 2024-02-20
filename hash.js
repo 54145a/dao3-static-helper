@@ -46,7 +46,6 @@ export async function FetchFile(url, nameGetter, hook, init){
     }
 
     const type = res.headers.get("Content-Type");
-    console.log(type);
     const name = nameGetter(url, type);
     return new File(content, name, {
         type,
@@ -91,7 +90,6 @@ export async function postText(data){
  */
 export async function postFile(file, hook){
     const MIME = suffix2MIME('.'+file.name.split('.').at(-1));
-    console.log(MIME)
     const reader = new FileReader();
     return new Promise((res, rej)=>{
         reader.addEventListener("load", async function(){
