@@ -30,7 +30,7 @@
 
     <div class="menu read">
         <h2 class="title">通过Hash读取文件</h2>
-        <form id="readHashForm">
+        <form id="readHashForm" onsubmit="return false">
             <p class="labal">Hash: </p>
             <input type="text" id="readHash"/>
             <input type="submit" value="获取"/>
@@ -53,7 +53,7 @@
 
     <div class="menu postText">
         <h2 class="title">上传文本</h2>
-        <form id="postTextForm">
+        <form id="postTextForm" onsubmit="return false">
             <p class="labal">输入文本: </p>
             <textarea id="postText"></textarea>
             <input type="submit" value="上传"/>
@@ -63,7 +63,7 @@
 
     <div class="menu postFile">
         <h2 class="title">上传文件</h2>
-        <form id="postFileForm">
+        <form id="postFileForm" onsubmit="return false">
             <p>点击按钮上传或直接将文件拖拽到下方</p>
             <input type="file" id="postFile" />
             <div class="preview flex-column">
