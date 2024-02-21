@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        #read,
-        #text {
+        #text,
+        #file {
             width: 90%;
+        }
+
+        body {
+            align-items: center;
         }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
@@ -17,10 +21,7 @@
     <title>Dao3 Static 工具</title>
 </head>
 
-<body></body>
-    输入Hash(不带后缀名): <br>
-    <input type="text" id="read"><br>
-    <button onclick="read()">获取</button><br>
+<body>
     在这里输入上传的文本: <br>
     <textarea id="text" cols="30" rows="10"></textarea><br>
     <button onclick="postText()">上传文本</button><br>
@@ -30,21 +31,20 @@
     <code id="result"></p>
     <script>
         const resultDisplay = document.getElementById("result");
-        function read() {
-            const hash = document.getElementById("read").value;
-            open(`//static.dao3.fun/block/${hash}.json`, "_blank");
-        }
         async function post(data) {
             const postResult = await fetch("https://static.dao3.fun/block/", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "text/json"
-                },
+                headers: {},
                 body: data,
                 mode: "cors"
             });
             const resultData = await postResult.json();
-            resultDisplay.innerText = JSON.stringify(resultData);
+            if (resultData.Key) {
+                const hash = resultData.Key;
+                resultData.textContent = `https://static.dao3.fun/block${hash}.json`;
+            } else {
+                resultDisplay.textContent = JSON.stringify(resultData);
+            }
         }
         async function postFile() {
             const input = document.getElementById("file");
