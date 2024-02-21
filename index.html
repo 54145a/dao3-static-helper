@@ -22,14 +22,18 @@
 
 <body>
     <h1>Dao3 Static 工具</h1>
+    <hr>
     <h2>Hash获取文件</h2>
     <input id="inputHash" type="text"><br>
     <button onclick="get()">获取</button>
+    <hr>
     <h2>上传文本</h2>
     <textarea id="inputText" cols="30" rows="10"></textarea><br>
     <button onclick="postText()">上传文本</button><br>
+    <hr>
     <h2>上传文件</h2>
     <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
+    <hr>
     <h2>上传结果</h2>
     <div id="result"></div>
     <script>
@@ -69,10 +73,9 @@
             localStorage.setItem("results", JSON.stringify([]));
         }
         for (const data of JSON.parse(localStorage.getItem("results")).slice(0, 100)) {
-            const code = document.createElement("code");
+            const code = document.createElement("p");
             code.textContent = `${new Date(data.time).toLocaleString()} ${JSON.stringify(data.result)}`;
             resultDisplay.appendChild(code);
-            resultDisplay.appendChild(document.createElement("br"));
         }
         function get() {
             const hash = document.getElementById("inputHash").value;
