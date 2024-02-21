@@ -7,7 +7,7 @@
     <style>
         #text,
         #file {
-            width: 90%;
+            width: 100%;
         }
 
         body {
@@ -41,7 +41,7 @@
             const resultData = await postResult.json();
             if (resultData.Key) {
                 const hash = resultData.Key;
-                resultData.textContent = `https://static.dao3.fun/block${hash}.json`;
+                resultDisplay.textContent = `https://static.dao3.fun/block${hash}.json`;
             } else {
                 resultDisplay.textContent = JSON.stringify(resultData);
             }
