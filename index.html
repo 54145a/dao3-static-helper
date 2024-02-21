@@ -16,9 +16,7 @@
         }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>
-        eruda.init();
-    </script>
+    <script>if (new URLSearchParams(location.search).get("eruda")) eruda.init();</script>
     <title>Dao3 Static 工具</title>
 </head>
 
@@ -31,7 +29,7 @@
     <textarea id="inputText" cols="30" rows="10"></textarea><br>
     <button onclick="postText()">上传文本</button><br>
     <h2>上传文件</h2>
-    <input id="inputFile" type="file" multiple="false"onchange="postFile()"><br>
+    <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
     <h2>上传结果</h2>
     <div id="result"></div>
     <script>
@@ -78,7 +76,7 @@
         }
         function get() {
             const hash = document.getElementById("inputHash").value;
-            open(dao3Static.get(hash),"_blank");
+            open(dao3Static.get(hash), "_blank");
         }
         async function post(data) {
             const resultData = await dao3Static.post(data);
