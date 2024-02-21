@@ -25,10 +25,11 @@
     在这里输入上传的文本: <br>
     <textarea id="text" cols="30" rows="10"></textarea><br>
     <button onclick="postText()">上传文本</button><br>
-    上传文件: <br>
+    上传文件 <br>
     <input type="file" multiple="false" id="file" onchange="postFile()"><br>
-    上传结果: <br>
-    <code id="result"></p>
+    上传结果 <br>
+    <code id="result">
+    <code id="recent"></code>
     <script>
         const resultDisplay = document.getElementById("result");
         async function post(data) {
@@ -41,7 +42,7 @@
             const resultData = await postResult.json();
             if (resultData.Key) {
                 const hash = resultData.Key;
-                resultDisplay.textContent = `https://static.dao3.fun/block${hash}.json`;
+                resultDisplay.textContent = `https://static.dao3.fun/block/${hash}.json`;
             } else {
                 resultDisplay.textContent = JSON.stringify(resultData);
             }
