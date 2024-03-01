@@ -13,6 +13,7 @@
 
         body {
             text-align: center;
+            word-break: break-all;
         }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
@@ -23,8 +24,8 @@
 <body>
     <h1>Dao3 Static 工具</h1>
     <hr>
-    <h2>Hash获取文件</h2>
-    <input id="inputHash" type="text"><br>
+    <h2>获取文件</h2>
+    <input id="inputHash" type="text" placeholder="Qmxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"><br>
     <button onclick="get()">获取</button>
     <hr>
     <h2>上传文本</h2>
@@ -73,12 +74,18 @@
             localStorage.setItem("results", JSON.stringify([]));
         }
         for (const data of JSON.parse(localStorage.getItem("results")).slice(0, 100)) {
-            const code = document.createElement("p");
-            code.textContent = `${new Date(data.time).toLocaleString()} ${JSON.stringify(data.result)}`;
-            resultDisplay.appendChild(code);
+            const div = document.createElement("div");
+            const time = document.createElement("h5");
+            time.textContent = new Date(data.time).toLocaleString();
+            div.appendChild(time);
+            const result = document.createElement("p");
+            result.textContent = JSON.stringify(data.result);
+            div.appendChild(result);
+            resultDisplay.appendChild(div);
         }
         function get() {
             const hash = document.getElementById("inputHash").value;
+            if(!/Qm[A-z]*^./.test(hash))return;
             open(dao3Static.get(hash), "_blank");
         }
         async function post(data) {
