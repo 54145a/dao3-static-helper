@@ -29,7 +29,7 @@
     <button onclick="get()">获取</button>
     <hr>
     <h2>上传文本</h2>
-    <textarea id="inputText" cols="30" rows="10"></textarea><br>
+    <textarea id="inputText" cols="30" rows="10" onchange="save()"></textarea><br>
     <button onclick="postText()">上传文本</button>
     <hr>
     <h2>上传文件</h2>
@@ -69,6 +69,8 @@
             }
         }
         const dao3Static = new Static("https://static.dao3.fun/block/");
+        const inputText = document.getElementById("inputText");
+        inputText.value = localStorage.getItem("inputText");
         const resultDisplay = document.getElementById("result");
         if (!localStorage.getItem("results")) {
             localStorage.setItem("results", JSON.stringify([]));
@@ -83,9 +85,12 @@
             div.appendChild(result);
             resultDisplay.appendChild(div);
         }
+        function save() {
+            localStorage.setItem("inputText", inputText.value);
+        }
         function get() {
             const hash = document.getElementById("inputHash").value;
-            if(!/Qm[A-z]*^./.test(hash))return;
+            if(!/Qm.*/.test(hash))return;
             open(dao3Static.get(hash), "_blank");
         }
         async function post(data) {
