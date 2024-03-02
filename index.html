@@ -23,18 +23,14 @@
 
 <body>
     <h1>Dao3 Static 工具</h1>
-    <hr>
     <h2>获取文件</h2>
     <input id="inputHash" type="text" placeholder="Qmxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"><br>
     <button onclick="get()">获取</button>
-    <hr>
     <h2>上传文本</h2>
     <textarea id="inputText" cols="30" rows="10" onchange="save()"></textarea><br>
     <button onclick="postText()">上传文本</button>
-    <hr>
     <h2>上传文件</h2>
     <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
-    <hr>
     <h2>上传结果</h2>
     <div id="result"></div>
     <script>
