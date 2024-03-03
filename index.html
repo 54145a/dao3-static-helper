@@ -11,9 +11,17 @@
             width: 99%;
         }
 
+        #inputText {
+            height: 30vh;
+        }
+
         body {
             text-align: center;
             word-break: break-all;
+        }
+
+        .text {
+            font-size: large;
         }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
@@ -23,16 +31,25 @@
 
 <body>
     <h1>Dao3 Static 工具</h1>
-    <h2>获取文件</h2>
-    <input id="inputHash" type="text" placeholder="Qmxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"><br>
-    <button onclick="get()">获取</button>
-    <h2>上传文本</h2>
-    <textarea id="inputText" cols="30" rows="10" onchange="save()"></textarea><br>
-    <button onclick="postText()">上传文本</button>
-    <h2>上传文件</h2>
-    <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
-    <h2>上传结果</h2>
-    <div id="result"></div>
+    <select class="text" id="selectTool" onchange="onSelectTool()">
+        <option value="result">上传记录</option>
+        <option value="getFile">获取文件</option>
+        <option value="postText">上传文本</option>
+        <option value="postFile">上传文件</option>
+    </select>
+    <div class="tool" id="getFile">
+        <input id="inputHash" type="text" placeholder="Qmxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"><br>
+        <pre class="text">如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</pre>
+        <button class="text" onclick="get()">获取</button>
+    </div>
+    <div class="tool" id="postText">
+        <textarea id="inputText" onchange="save()"></textarea><br>
+        <button class="text" onclick="postText()">上传</button>
+    </div>
+    <div class="tool" id="postFile">
+        <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
+    </div>
+    <div class="tool" id="result"></div>
     <script>
         "use strict";
         class Static {
@@ -47,7 +64,7 @@
              * @returns {URL}
              */
             get(hash) {
-                return new URL(`${this.baseUrl.toString()}${hash}.json`);
+                return new URL(`${this.baseUrl.toString()}${hash}`);
             }
             /**
              * @param {string|Blob} data
@@ -65,28 +82,35 @@
             }
         }
         const dao3Static = new Static("https://static.dao3.fun/block/");
+        const selectTool = document.getElementById("selectTool");
         const inputText = document.getElementById("inputText");
         inputText.value = localStorage.getItem("inputText");
         const resultDisplay = document.getElementById("result");
         if (!localStorage.getItem("results")) {
             localStorage.setItem("results", JSON.stringify([]));
         }
-        for (const data of JSON.parse(localStorage.getItem("results")).slice(0, 100)) {
-            const div = document.createElement("div");
-            const time = document.createElement("h5");
-            time.textContent = new Date(data.time).toLocaleString();
-            div.appendChild(time);
-            const result = document.createElement("p");
-            result.textContent = JSON.stringify(data.result);
-            div.appendChild(result);
-            resultDisplay.appendChild(div);
+        if (!localStorage.getItem("toolName")) {
+            localStorage.setItem("toolName", "result");
+        }
+        function refreshResult() {
+            resultDisplay.innerHTML = "";
+            for (const data of JSON.parse(localStorage.getItem("results")).slice(0, 100)) {
+                const div = document.createElement("div");
+                const time = document.createElement("h3");
+                time.textContent = new Date(data.time).toLocaleString();
+                div.appendChild(time);
+                const result = document.createElement("code");
+                result.textContent = JSON.stringify(data.result);
+                div.appendChild(result);
+                resultDisplay.appendChild(div);
+            }
         }
         function save() {
             localStorage.setItem("inputText", inputText.value);
         }
         function get() {
             const hash = document.getElementById("inputHash").value;
-            if(!/Qm.*/.test(hash))return;
+            if (!/Qm.*/.test(hash)) return;
             open(dao3Static.get(hash), "_blank");
         }
         async function post(data) {
@@ -97,7 +121,7 @@
                 result: resultData
             });
             localStorage.setItem("results", JSON.stringify(results));
-            location.reload();
+            switchTool("result");
         }
         async function postFile() {
             const input = document.getElementById("inputFile");
@@ -110,6 +134,19 @@
             if (data.length === 0) return;
             await post(data);
         }
+        function onSelectTool() {
+            switchTool(selectTool.value);
+        }
+        function switchTool(name) {
+            if (selectTool.value !== name) selectTool.value = name;
+            if (name === "result") refreshResult();
+            Array.from(document.getElementsByClassName("tool")).forEach(element => {
+                element.style.display = "none";
+            });
+            document.getElementById(name).style.display = "";
+            localStorage.setItem("toolName", name);
+        }
+        switchTool(localStorage.getItem("toolName"));
     </script>
 </body>
 
