@@ -12,7 +12,7 @@
         }
 
         #inputText {
-            height: 30vh;
+            height: 50vh;
         }
 
         .tool {
@@ -21,7 +21,11 @@
         }
 
         .text {
-            font-size: large;
+            font-size: larger;
+        }
+
+        #navigation, .tool {
+            outline: solid black;
         }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
@@ -30,19 +34,18 @@
 </head>
 
 <body>
-    <div class="text" id="navigation">
-        <b id="heading" >Dao3 Static 工具</b>
-        <select id="selectTool" onchange="onSelectTool()">
+    <div id="navigation">
+        <b class="text" id="heading" >Dao3 Static 工具</b>
+        <select class="text" id="selectTool" onchange="onSelectTool()">
             <option value="getFile">获取文件</option>
             <option value="postText">上传文本</option>
             <option value="postFile">上传文件</option>
             <option value="result">上传记录</option>
         </select>
     </div>
-    <hr>
     <div class="tool" id="getFile">
+        <p class="text">粘贴以Qm开头的Key。如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</p>
         <input id="inputHash" type="text" placeholder="Qmxxx"><br>
-        <pre class="text">在上方粘贴以Qm开头的Key。如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</pre>
         <button class="text" onclick="get()">获取</button>
     </div>
     <div class="tool" id="postText">
@@ -52,7 +55,7 @@
     <div class="tool" id="postFile">
         <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
     </div>
-    <div class="tool" id="result"></div>
+    <div class="tool text" id="result"></div>
     <script>
         "use strict";
         class Static {
@@ -97,9 +100,9 @@
         }
         function refreshResult() {
             resultDisplay.innerHTML = "";
-            for (const data of JSON.parse(localStorage.getItem("results")).slice(0, 100)) {
+            for (const data of JSON.parse(localStorage.getItem("results")).slice(0,20)) {
                 const div = document.createElement("div");
-                const time = document.createElement("i");
+                const time = document.createElement("b");
                 time.textContent = new Date(data.time).toLocaleString();
                 div.appendChild(time);
                 div.appendChild(document.createElement("br"));
