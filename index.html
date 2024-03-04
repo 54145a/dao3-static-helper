@@ -30,12 +30,12 @@
 </head>
 
 <body>
-    <div class="text" id="heading">Dao3 Static 工具
+    <div class="text" id="navigation">Dao3 Static 工具
         <select id="selectTool" onchange="onSelectTool()">
-            <option value="result">上传记录</option>
             <option value="getFile">获取文件</option>
             <option value="postText">上传文本</option>
             <option value="postFile">上传文件</option>
+            <option value="result">上传记录</option>
         </select>
     </div>
     <hr>
@@ -92,7 +92,7 @@
             localStorage.setItem("results", JSON.stringify([]));
         }
         if (!localStorage.getItem("toolName")) {
-            localStorage.setItem("toolName", "result");
+            localStorage.setItem("toolName", "getFile");
         }
         function refreshResult() {
             resultDisplay.innerHTML = "";
