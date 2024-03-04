@@ -12,7 +12,7 @@
         }
 
         #inputText {
-            height: 50vh;
+            height: 70vh;
         }
 
         .tool {
@@ -24,9 +24,6 @@
             font-size: larger;
         }
 
-        #navigation, .tool {
-            outline: solid black;
-        }
     </style>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>if (new URLSearchParams(location.search).get("eruda")) eruda.init();</script>
@@ -43,6 +40,7 @@
             <option value="result">上传记录</option>
         </select>
     </div>
+    <hr>
     <div class="tool" id="getFile">
         <p class="text">粘贴以Qm开头的Key。如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</p>
         <input id="inputHash" type="text" placeholder="Qmxxx"><br>
