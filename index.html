@@ -30,7 +30,8 @@
 </head>
 
 <body>
-    <div class="text" id="navigation">Dao3 Static 工具
+    <div class="text" id="navigation">
+        <b id="heading" >Dao3 Static 工具</b>
         <select id="selectTool" onchange="onSelectTool()">
             <option value="getFile">获取文件</option>
             <option value="postText">上传文本</option>
@@ -98,9 +99,10 @@
             resultDisplay.innerHTML = "";
             for (const data of JSON.parse(localStorage.getItem("results")).slice(0, 100)) {
                 const div = document.createElement("div");
-                const time = document.createElement("h3");
+                const time = document.createElement("i");
                 time.textContent = new Date(data.time).toLocaleString();
                 div.appendChild(time);
+                div.appendChild(document.createElement("br"));
                 const result = document.createElement("code");
                 result.textContent = JSON.stringify(data.result);
                 div.appendChild(result);
