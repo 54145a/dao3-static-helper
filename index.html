@@ -88,17 +88,17 @@
         const dao3Static = new Static("https://static.dao3.fun/block/");
         const selectTool = document.getElementById("selectTool");
         const inputText = document.getElementById("inputText");
-        inputText.value = localStorage.getItem("inputText");
+        inputText.value = localStorage.getItem("dao3StaticTool_inputText");
         const resultDisplay = document.getElementById("result");
         if (!localStorage.getItem("results")) {
-            localStorage.setItem("results", JSON.stringify([]));
+            localStorage.setItem("dao3StaticTool_results", JSON.stringify([]));
         }
         if (!localStorage.getItem("toolName")) {
-            localStorage.setItem("toolName", "getFile");
+            localStorage.setItem("dao3StaticTool_toolName", "getFile");
         }
         function refreshResult() {
             resultDisplay.innerHTML = "";
-            for (const data of JSON.parse(localStorage.getItem("results")).slice(0,20)) {
+            for (const data of JSON.parse(localStorage.getItem("dao3StaticTool_results")).slice(0,20)) {
                 const div = document.createElement("div");
                 const time = document.createElement("b");
                 time.textContent = new Date(data.time).toLocaleString();
@@ -111,7 +111,7 @@
             }
         }
         function save() {
-            localStorage.setItem("inputText", inputText.value);
+            localStorage.setItem("dao3StaticTool_inputText", inputText.value);
         }
         function get() {
             const hash = document.getElementById("inputHash").value;
@@ -120,12 +120,12 @@
         }
         async function post(data) {
             const resultData = await dao3Static.post(data);
-            const results = JSON.parse(localStorage.getItem("results"));
+            const results = JSON.parse(localStorage.getItem("dao3StaticTool_results"));
             results.unshift({
                 time: Date.now(),
                 result: resultData
             });
-            localStorage.setItem("results", JSON.stringify(results));
+            localStorage.setItem("dao3StaticTool_results", JSON.stringify(results));
             switchTool("result");
         }
         async function postFile() {
@@ -149,9 +149,9 @@
                 element.style.display = "none";
             });
             document.getElementById(name).style.display = "";
-            localStorage.setItem("toolName", name);
+            localStorage.setItem("dao3StaticTool_toolName", name);
         }
-        switchTool(localStorage.getItem("toolName"));
+        switchTool(localStorage.getItem("dao3StaticTool_toolName"));
     </script>
 </body>
 
