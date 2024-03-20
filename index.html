@@ -21,8 +21,6 @@
         }
 
     </style>
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>if (new URLSearchParams(location.search).get("eruda")) eruda.init();</script>
     <title>Dao3 Static 工具</title>
 </head>
 
@@ -50,8 +48,10 @@
         <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
     </div>
     <div class="tool text" id="result"></div>
+    <script src="//54145a.github.io/global.js"></script>
     <script>
         "use strict";
+        const storage = getStorage("dao3StaticTool");
         class Static {
             /**
              * @param {URL} baseUrl
@@ -84,17 +84,17 @@
         const dao3Static = new Static("https://static.dao3.fun/block/");
         const selectTool = document.getElementById("selectTool");
         const inputText = document.getElementById("inputText");
-        inputText.value = localStorage.getItem("dao3StaticTool_inputText");
+        inputText.value = storage.inputText??"";
         const resultDisplay = document.getElementById("result");
-        if (!localStorage.getItem("results")) {
-            localStorage.setItem("dao3StaticTool_results", JSON.stringify([]));
+        if (!storage.results) {
+            storage.results = [];
         }
-        if (!localStorage.getItem("toolName")) {
-            localStorage.setItem("dao3StaticTool_toolName", "getFile");
+        if (!storage.toolName) {
+            storage.toolName = "getFile";
         }
         function refreshResult() {
             resultDisplay.innerHTML = "";
-            for (const data of JSON.parse(localStorage.getItem("dao3StaticTool_results")).slice(0,20)) {
+            for (const data of storage.results.slice(0,20)) {
                 const div = document.createElement("div");
                 const time = document.createElement("b");
                 time.textContent = new Date(data.time).toLocaleString();
@@ -107,7 +107,7 @@
             }
         }
         function save() {
-            localStorage.setItem("dao3StaticTool_inputText", inputText.value);
+            storage.inputText = inputText.value;
         }
         function get() {
             const hash = document.getElementById("inputHash").value;
@@ -116,12 +116,10 @@
         }
         async function post(data) {
             const resultData = await dao3Static.post(data);
-            const results = JSON.parse(localStorage.getItem("dao3StaticTool_results"));
-            results.unshift({
+            storage.results.unshift({
                 time: Date.now(),
                 result: resultData
             });
-            localStorage.setItem("dao3StaticTool_results", JSON.stringify(results));
             switchTool("result");
         }
         async function postFile() {
@@ -145,9 +143,9 @@
                 element.style.display = "none";
             });
             document.getElementById(name).style.display = "";
-            localStorage.setItem("dao3StaticTool_toolName", name);
+            storage.toolName = name;
         }
-        switchTool(localStorage.getItem("dao3StaticTool_toolName"));
+        switchTool(storage.toolName);
     </script>
 </body>
 
