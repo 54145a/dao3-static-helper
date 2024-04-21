@@ -12,89 +12,81 @@
         }
 
         #inputText {
-            height: 70vh;
+            height: 80svh;
         }
 
-        .tool {
+
+        nav {
+            position: sticky;
+            top: 0;
+        }
+
+        nav>ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        nav>ul>li {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        main {
             text-align: center;
             word-break: break-all;
         }
 
+        main>div {
+            min-height: 100svh;
+            padding-top: 10svh;
+        }
     </style>
     <title>Dao3 Static 工具</title>
 </head>
 
 <body>
-    <div id="navigation">
-        <b class="text" id="heading" >Dao3 Static 工具</b>
-        <select class="text" id="selectTool" onchange="onSelectTool()">
-            <option value="getFile">获取文件</option>
-            <option value="postText">上传文本</option>
-            <option value="postFile">上传文件</option>
-            <option value="result">上传记录</option>
-        </select>
-    </div>
-    <hr>
-    <div class="tool" id="getFile">
-        <p class="text">粘贴以Qm开头的Key。如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</p>
-        <input id="inputHash" type="text" placeholder="Qmxxx"><br>
-        <button class="text" onclick="get()">获取</button>
-    </div>
-    <div class="tool" id="postText">
-        <textarea id="inputText" onchange="save()"></textarea><br>
-        <button class="text" onclick="postText()">上传</button>
-    </div>
-    <div class="tool" id="postFile">
-        <input id="inputFile" type="file" multiple="false" onchange="postFile()"><br>
-    </div>
-    <div class="tool text" id="result"></div>
-    <script src="//54145a.github.io/global.js"></script>
-    <script>
-        "use strict";
+    <nav>
+        <ul>
+            <li><a href="#getFile">获取文件</a></li>
+            <li><a href="#postText">上传文本</a></li>
+            <li><a href="#postFile">上传文件</a></li>
+            <li><a href="#result">上传记录</a></li>
+        </ul>
+    </nav>
+    <main>
+        <div id="getFile">
+            <p>粘贴以Qm开头的Key。如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</p>
+            <input id="inputHash" type="text" placeholder="Qmxxxxxxxxxx(.json)"><br>
+            <button id="getFileButton">获取</button>
+        </div>
+        <div id="postText">
+            <textarea id="inputText"></textarea><br />
+            <button id="postTextButton">上传</button>
+        </div>
+        <div id="postFile">
+            <input id="inputFile" type="file" multiple="false"><br />
+        </div>
+        <div id="result"></div>
+    </main>
+    <script type="module">
+        import { getStorage } from "//54145a.github.io/global.js";
+        import { Static } from "./static.js";
         const storage = getStorage("dao3StaticTool");
-        class Static {
-            /**
-             * @param {URL} baseUrl
-             */
-            constructor(baseUrl) {
-                this.baseUrl = baseUrl;
-            }
-            /**
-             * @param {string} hash
-             * @returns {URL}
-             */
-            get(hash) {
-                return new URL(`${this.baseUrl.toString()}${hash}`);
-            }
-            /**
-             * @param {string|Blob} data
-             * @returns {object}
-             */
-            async post(data) {
-                const postResult = await fetch(this.baseUrl, {
-                    method: "POST",
-                    headers: {},
-                    body: data,
-                    mode: "cors"
-                });
-                const resultData = await postResult.json();
-                return resultData;
-            }
-        }
         const dao3Static = new Static("https://static.dao3.fun/block/");
-        const selectTool = document.getElementById("selectTool");
         const inputText = document.getElementById("inputText");
-        inputText.value = storage.inputText??"";
+        const inputFile = document.getElementById("inputFile");
+        const getFileButton = document.getElementById("getFileButton");
+        const postTextButton = document.getElementById("postTextButton");
+        inputText.value = storage.inputText ?? "";
         const resultDisplay = document.getElementById("result");
         if (!storage.results) {
             storage.results = [];
         }
-        if (!storage.toolName) {
-            storage.toolName = "getFile";
-        }
         function refreshResult() {
             resultDisplay.innerHTML = "";
-            for (const data of storage.results.slice(0,20)) {
+            for (const data of storage.results.slice(0, 20)) {
                 const div = document.createElement("div");
                 const time = document.createElement("b");
                 time.textContent = new Date(data.time).toLocaleString();
@@ -106,46 +98,34 @@
                 resultDisplay.appendChild(div);
             }
         }
-        function save() {
+        inputText.onchange = function () {
             storage.inputText = inputText.value;
-        }
-        function get() {
+        };
+        getFileButton.onclick = function () {
             const hash = document.getElementById("inputHash").value;
             if (!/Qm.*/.test(hash)) return;
             open(dao3Static.get(hash), "_blank");
-        }
+        };
         async function post(data) {
             const resultData = await dao3Static.post(data);
             storage.results.unshift({
                 time: Date.now(),
                 result: resultData
             });
-            switchTool("result");
+            refreshResult();
+            location.hash = "#result";
         }
-        async function postFile() {
-            const input = document.getElementById("inputFile");
+        inputFile.onchange = async function postFile() {
             const file = input.files[0];
             await post(file);
-        }
-        async function postText() {
+        };
+        postTextButton.onclick = async function () {
             const text = document.getElementById("inputText");
             const data = text.value;
             if (data.length === 0) return;
             await post(data);
-        }
-        function onSelectTool() {
-            switchTool(selectTool.value);
-        }
-        function switchTool(name) {
-            if (selectTool.value !== name) selectTool.value = name;
-            if (name === "result") refreshResult();
-            Array.from(document.getElementsByClassName("tool")).forEach(element => {
-                element.style.display = "none";
-            });
-            document.getElementById(name).style.display = "";
-            storage.toolName = name;
-        }
-        switchTool(storage.toolName);
+        };
+        refreshResult();
     </script>
 </body>
 
