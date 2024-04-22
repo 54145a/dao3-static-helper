@@ -98,14 +98,14 @@
                 resultDisplay.appendChild(div);
             }
         }
-        inputText.onchange = function () {
+        inputText.addEventListener("change", function () {
             storage.inputText = inputText.value;
-        };
-        getFileButton.onclick = function () {
+        });
+        getFileButton.addEventListener("click", function () {
             const hash = document.getElementById("inputHash").value;
             if (!/Qm.*/.test(hash)) return;
             open(dao3Static.get(hash), "_blank");
-        };
+        });
         async function post(data) {
             const resultData = await dao3Static.post(data);
             storage.results.unshift({
@@ -115,16 +115,16 @@
             refreshResult();
             location.hash = "#result";
         }
-        inputFile.onchange = async function postFile() {
-            const file = input.files[0];
+        inputFile.addEventListener("change", async function postFile() {
+            const file = inputFile.files[0];
             await post(file);
-        };
-        postTextButton.onclick = async function () {
+        });
+        postTextButton.addEventListener("click", async function () {
             const text = document.getElementById("inputText");
             const data = text.value;
             if (data.length === 0) return;
             await post(data);
-        };
+        });
         refreshResult();
     </script>
 </body>
