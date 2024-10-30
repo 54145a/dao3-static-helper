@@ -38,40 +38,37 @@
             word-break: break-all;
         }
 
-        main>div {
+        /*main>div {
             min-height: 100svh;
             padding-top: 10svh;
-        }
+        }*/
     </style>
     <title>Dao3 Static 工具</title>
 </head>
 
 <body>
-    <nav>
-        <ul>
-            <li><a href="#getFile">获取文件</a></li>
-            <li><a href="#postText">上传文本</a></li>
-            <li><a href="#postFile">上传文件</a></li>
-            <li><a href="#result">上传记录</a></li>
-        </ul>
-    </nav>
     <main>
-        <div id="getFile">
+        <h1>Dao3 Static 工具</h1>
+        <h2 id="getFile">获取文件</h2>
+        <div>
             <p>粘贴以Qm开头的Key。如果获取文本请加上后缀名“.json”，图片、视频等无需加后缀名</p>
             <input id="inputHash" type="text" placeholder="Qmxxxxxxxxxx(.json)"><br>
             <button id="getFileButton">获取</button>
         </div>
-        <div id="postText">
+        <h2 id="postText">上传文本</h2>
+        <div>
             <textarea id="inputText"></textarea><br />
             <button id="postTextButton">上传</button>
         </div>
-        <div id="postFile">
+        <h2 id="postFile">上传文件</h2>
+        <div>
             <input id="inputFile" type="file" multiple="false"><br />
         </div>
-        <div id="result"></div>
+        <h2 id="result">上传记录</h2>
+        <div></div>
     </main>
     <script type="module">
-        import { getStorage } from "/global.js";
+        import { getStorage } from "./storage.js";
         import { Static } from "./static.js";
         const storage = getStorage("dao3StaticTool");
         const dao3Static = new Static("https://static.dao3.fun/block/");
@@ -80,7 +77,7 @@
         const getFileButton = document.getElementById("getFileButton");
         const postTextButton = document.getElementById("postTextButton");
         inputText.value = storage.inputText ?? "";
-        const resultDisplay = document.getElementById("result");
+        const resultDisplay = document.querySelector("#result+div");
         if (!storage.results) {
             storage.results = [];
         }
@@ -112,8 +109,9 @@
                 time: Date.now(),
                 result: resultData
             });
+            prompt(JSON.stringify(resultData), resultData.Key);
             refreshResult();
-            location.hash = "#result";
+            //location.hash = "#result";
         }
         inputFile.addEventListener("change", async function postFile() {
             const file = inputFile.files[0];
